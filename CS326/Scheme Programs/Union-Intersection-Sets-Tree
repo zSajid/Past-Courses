@@ -1,0 +1,95 @@
+; Checks if member
+(define (member? x L)
+	(cond 
+		((null? L) #f)
+		((equal? x (car L) ) #t)
+		(else (member? x (cdr L)))))
+
+; Function 1 Check for is-set
+(define (is-set? L)
+  (cond
+    ((null? L) #t)
+    ((member (car L) (cdr L)) (is-set? (cdr L)) #f )
+    (else (is-set? (cdr L)))))
+         
+; Function 2, make-set
+(define (make-set L)
+	 (cond 
+		((null? L) L)
+		((member (car L) (cdr L)) 
+                     (make-set (cdr L)) )
+		(else 
+                     (cons (car L) (make-set (cdr L))))))
+
+; Function 3
+(define (subset? A S)
+  (cond 
+    ((null? A ) #t)
+    ((member (car A) S)
+              (subset? (cdr A) S))
+    (else #f)))
+    
+; Function 4
+(define (union A B)
+	(cond 
+		((null? A) B)		
+		(else 
+                     (make-set(cons(car A)(union(cdr A) B))))))
+
+; Function 5
+(define (intersection setA setB)
+	(cond 
+	     ((null? setA) '())
+	     ((member (car setA) setB) 
+                                     (cons (car setA) (intersection(cdr setA) setB)))
+             (else 
+                  (intersection(cdr setA) setB)))) 		
+
+; Function 6 helper functions
+(define (val T)
+	(car T))
+
+
+(define (left T)	
+	 (cadr T))
+
+(define (right T)
+	(caddr T))
+
+; Function 6
+(define T 
+  '(13 
+    (5 
+     (1 () ()) 
+     (8 () 
+      (9 () ()))) 
+    (22 
+     (17 () ()) 
+     (25 () ())))) 
+
+
+(define (tree-member? V T)
+	(cond 
+		((null? T) '())
+		((= V (val T)) #t)
+		((< V (val T)) (tree-member? V (left T)))
+		((> V (val T)) (tree-member? V (right T)))))
+
+; Function 7
+(define (preorder T)
+	(cond
+		((null? T) '())
+		(else 
+                      (cons(val T)
+			(append(preorder(left T))	
+				(preorder(right T)))))))
+
+; Function 8
+(define (inorder T)
+	(cond
+		((null? T) '())
+		(else 
+                     (append(inorder(left T))(cons (val T) (inorder (right T)))))))
+
+(define L '(1 2 3 2))
+(define Q '(1 3 4 5))

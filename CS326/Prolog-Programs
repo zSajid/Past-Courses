@@ -1,0 +1,84 @@
+%1.
+%Base case where both list are empty, do nothing
+reverse([],[]).
+% Recursive case, where X is the head L with K being reversed if O and
+% [X] get appended after to K after coming back recursively.
+reverse([X|L],K) :- reverse(L,O), append(O,[X],K).
+
+%2.
+% Base case, if there is a list, and we want 0 values from it, the
+% original list does not matter as the resulting list will be the empty
+% list
+take(_,0,[]).
+% Second base case, if the list is empty, and we want 20 elements from
+% it, it will return a empty list
+take([],_,[]).
+take([H|L],N,[H|L1]) :- N > 0, I is N-1, take(L,I,L1).
+
+%3.
+%Given information
+tree(nil).
+tree(node(_,Left,Right)) :- tree(Left), tree(Right).
+
+% Base case, if the value of the tree itself is null, then return 0 as
+% in it does not exit
+nleaves(nil,0).
+
+% Other wise, there exist a node who has a value, but the left and right
+% child of that value is null, however, N will return a 1. It's possible
+% to cut it, but not necessary
+nleaves(node(_,nil,nil),1).
+% Recursive case, where we check the number of leaves in each side of
+% the tree and set the returning N as the bounding variable for the
+% result of sum of Left node and Right node
+nleaves(node(_,L,R),N) :- nleaves(L,NumL), nleaves(R,NumR), N is NumL+NumR.
+
+%Base case, if value is the root
+treeMember(Value, node( Value, _, _)).
+% Recursive cases, there exist a value, it does not matter if it's left
+% or right, just recursively follow them to find a solution
+treeMember(Value, node(_Val1, _, Right)) :- treeMember(Value, Right).
+treeMember(Value, node(_Val1, Left, _)) :- treeMember(Value, Left).
+
+%Base case nil, bound the empty variable as the returning list
+preorder(nil, []).
+
+% Recursive case, where you go to the left side completely first and
+% then the right and then the right all the way as long as no null and
+% then left, and then append those list together
+preorder(node(K,L,R), List):-preorder(L,LLeft), preorder(R, LRight),
+	                         append([K|LLeft], LRight, List).
+
+max(A, B, X) :- A < B, X = B. %vice versa from bot
+max(A, B, X) :- A >=B, X = A. %If A >= B, then pick X as the bounding variable
+
+height(nil, 0). %Standard case where if it's nil, bound 0.
+height(node(_, Left, Right), H):- height(Right, RH2), height(Left, LH1), max(LH1, RH2, MH3),
+H is MH3+1. %This max function will return the bigger value of nodes found +1 to the height, so if A, it will bound A to H3 + 1 to height
+
+
+
+%4.
+% Base case, if the value list that is going to be inserted into is
+% null, then return the value as a corresponding list
+insert(X, [], [X]).
+% Other wise check a base case where if X <= Y, then insert X
+insert(X, [Y|L], [X,Y|L]) :- X =< Y.
+% Recursive case in which [Y|L2] will have L2 come back after x has been
+% inserted into it's appropriate location, and Y is head of the list,
+% recursively check and make a list with the x value inserted
+insert(X, [Y|L1], [Y|L2]) :- insert(X, L1, L2).
+
+%5.
+% The base case where one of the list is null, the resulting list should
+% be null as well
+flatten([],[]).
+
+%When it is a single variable such as the head
+
+% The recursive case, where we have a list with a head, and then we have
+% an input L as the list to get flatten each item within the list one by
+% one, and then reattach them using append as a single list
+flatten([H|T],L) :- flatten(H,newHead), flatten(T,newTail), append(newHead,newTail,L).
+
+flatten(X,[X]).

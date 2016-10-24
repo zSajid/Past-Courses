@@ -1,0 +1,7 @@
+(define (sum list)
+  (sum-total list 0))
+
+(define (sum-total list totalSoFar)
+  (if (null? list) 
+                  totalSoFar
+      (sum-total (cdr list) (+ (car list) totalSoFar))))
