@@ -1,0 +1,42 @@
+# ExampleLOOP1.asm
+# Copy integers from one array and put them in another
+# CS 219
+
+	.data
+array1:	.word   0,1,2,3,4,5,6,7,8,9		# define array data and addresses as labels
+array2:	.word   10,11,12,13,14,15,16,17,18,19	
+
+	.text
+		main: addi $t0, $zero, 0 #This is to initialize the offset of 4 bytes per array slot
+		#prime the loop
+		lw $t1, array2($t0) #This takes the first item in array 2 into $t1
+		sw $t1, array1($t0) #This puts the item from t1 into array1 position 0
+		
+		
+		while: beq $t0, 40, exit # This is a branching condition 
+			addi $t0, $t0, 4 #increments the thing by 4 bytes 
+			lw $t1, array2($t0)
+			sw $t1, array1($t0)
+			j while
+	
+exit:	
+		#This is just to test out if the array has been copied over. 
+		addi $t0, $zero, 0
+	
+		lw $t1, array1($t0)
+
+		#This is a call to the system to print out variables in the register
+		li $v0, 1 
+		move $a0, $t1
+		syscall
+
+		#Store value from array with specific index to register location
+		addi $t0, $t0, 4
+		lw $t1, array1($t0)
+		
+		#Does the same thing as above
+		li $v0, 1 
+		move $a0, $t1
+		syscall
+		
+superExit:
