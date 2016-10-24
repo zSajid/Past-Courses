@@ -1,0 +1,8 @@
+8
+A C 3
+A B 4
+C D 7
+B D 4
+B F 1
+F X 1
+A X 5
